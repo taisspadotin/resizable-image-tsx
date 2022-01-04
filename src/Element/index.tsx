@@ -5,7 +5,9 @@ function Element(props: any) {
     const [height, setHeight] = useState<number>(100)
     const [width, setWidth] = useState<number>(100)
     const [lastY, setLastY] = useState<number>(0)
+    const [lastX, setLastX] = useState<number>(0)
     const [top, setTop] = useState<number>(50)
+    const [left, setLeft] = useState<number>(200)
     
     const handleDrag = (op: string, e: any) => {
         let soma = 1;
@@ -25,9 +27,19 @@ function Element(props: any) {
                 setLastY(e.clientY);
             }
         }
-        /*else if(op === "rigth"){
-
-        }*/
+        else if(op === "rigth"){
+            console.log("RIGTH", e.clientX)
+            if(lastX !== 0 && e.clientX !== 0)
+            {
+                soma = e.clientX - lastX;
+                sub = e.clientX - lastX;
+            }
+            if(e.clientX !== lastX)
+            {
+                setWidth(e.clientX > lastX ? (width + soma) : (width + sub));
+                setLastX(e.clientX);
+            }
+        }
         else if(op === "top")
         {
             if(lastY !== 0 && e.clientY !== 0)
@@ -35,33 +47,34 @@ function Element(props: any) {
                 soma = lastY - e.clientY;
                 sub = e.clientY - lastY;
             }
-            console.log("soma", soma)
-            console.log("sub", sub)
             if(e.clientY !== lastY && top > 0)
             {
-                /*console.log("e.clientY", e.clientY)
-                console.log("novo top", e.clientY < lastY ? (top - soma) : (top + sub))
-                console.log("novo height", e.clientY < lastY ? (height + soma) : (height + sub))
-                console.log("direção", e.clientY, lastY, top, soma, sub, height)*/
                 //Valida se não foi arrastada pra fora da pagina (para cima).
                 if(e.clientY < lastY ? (top + sub) : (top + sub) > 0)
                 {
-                    if(e.clientY < lastY){
-                        setHeight(height + soma);
-                    }
-                    else{
-                        console.log('HEIGHT', height + sub)
-                        setHeight(height + soma);
-                    }
-                    
+                    setHeight(e.clientY < lastY ? height + soma : height + soma);
                     setTop(e.clientY < lastY ? (top - soma) : (top + sub));
                     setLastY(e.clientY);    
                 }
             }
         }
-        /*else if(op === "left"){
-
-        }*/
+        else if(op === "left"){
+            if(lastX !== 0 && e.clientX !== 0)
+            {
+                soma = lastX - e.clientX;
+                sub = e.clientX - lastX;
+            }
+            if(e.clientX !== lastX && top > 0)
+            {
+                //Valida se não foi arrastada pra fora da pagina (para cima).
+                if(e.clientX < lastX ? (top + sub) : (top + sub) > 0)
+                {
+                    setWidth(e.clientX < lastX ? width + soma : width + soma);
+                    setLeft(e.clientX < lastX ? (left - soma) : (left + sub));
+                    setLastX(e.clientX);    
+                }
+            }
+        }
     }
 
     const handleDragStart = async (e: any) => {
@@ -71,7 +84,7 @@ function Element(props: any) {
     }
 
     return(
-            <div style={{position: 'absolute', background: 'green', width: width, height: height, top: top}}>
+            <div style={{position: 'absolute', background: 'green', width: width, height: height, top: top, left: left}}>
                 <div style={{position: 'relative', width: width, height: height}}>
                     <div
                         draggable={true}
