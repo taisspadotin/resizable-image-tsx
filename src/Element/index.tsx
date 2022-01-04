@@ -1,19 +1,24 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function Element(props: any) {
+interface Atributos {
+    children: any,
+    minWidth?: number,
+    minHeight?: number
+}
+
+function Element(props: Atributos) {
     const [height, setHeight] = useState<number>(100)
     const [width, setWidth] = useState<number>(100)
     const [lastY, setLastY] = useState<number>(0)
     const [lastX, setLastX] = useState<number>(0)
     const [top, setTop] = useState<number>(50)
     const [left, setLeft] = useState<number>(200)
+    const [minWidth, setMinWidth] = useState<number>(20);
+    const [minHeight, setMinHeight] = useState<number>(20);
     
     const handleDrag = (op: string, e: any) => {
         let soma = 1;
         let sub = -1;
-        
-        console.log("e.clientY > lastY", e.clientY, lastY)
 
         if(op === "bottom"){
             if(lastY !== 0 && e.clientY !== 0)
@@ -28,7 +33,6 @@ function Element(props: any) {
             }
         }
         else if(op === "rigth"){
-            console.log("RIGTH", e.clientX)
             if(lastX !== 0 && e.clientX !== 0)
             {
                 soma = e.clientX - lastX;
