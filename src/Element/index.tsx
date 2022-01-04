@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface Atributos {
-    children: any,
+    children: React.ReactNode,
     minWidth?: number,
     minHeight?: number
 }
@@ -13,10 +13,10 @@ function Element(props: Atributos) {
     const [lastX, setLastX] = useState<number>(0)
     const [top, setTop] = useState<number>(50)
     const [left, setLeft] = useState<number>(200)
-    const [minWidth, setMinWidth] = useState<number>(20);
-    const [minHeight, setMinHeight] = useState<number>(20);
+    const [minWidth, setMinWidth] = useState<number>(props.minWidth ? props.minWidth : 50);
+    const [minHeight, setMinHeight] = useState<number>(props.minHeight ? props.minHeight : 50);
     
-    const handleDrag = (op: string, e: any) => {
+    const handleDrag = (op: string, e: React.DragEvent<HTMLDivElement>) => {
         let soma = 1;
         let sub = -1;
 
@@ -28,8 +28,12 @@ function Element(props: Atributos) {
             }
             if(e.clientY !== lastY)
             {
-                setHeight(e.clientY > lastY ? (height + soma) : (height + sub));
-                setLastY(e.clientY);
+                //Valida se o tamanho do height bate com o mimHeight 
+                if(e.clientY > lastY ? (height + soma) : (height + sub) >= minHeight){
+                    setHeight(e.clientY > lastY ? (height + soma) : (height + sub));
+                    setLastY(e.clientY);
+                }
+                
             }
         }
         else if(op === "rigth"){
@@ -40,8 +44,11 @@ function Element(props: Atributos) {
             }
             if(e.clientX !== lastX)
             {
-                setWidth(e.clientX > lastX ? (width + soma) : (width + sub));
-                setLastX(e.clientX);
+                //Valida o tamanho com o mimWidth
+                if(e.clientX > lastX ? (width + soma) : (width + sub) >= minWidth){
+                    setWidth(e.clientX > lastX ? (width + soma) : (width + sub));
+                    setLastX(e.clientX);
+                }
             }
         }
         else if(op === "top")
@@ -54,9 +61,9 @@ function Element(props: Atributos) {
             if(e.clientY !== lastY && top > 0)
             {
                 //Valida se não foi arrastada pra fora da pagina (para cima).
-                if(e.clientY < lastY ? (top + sub) : (top + sub) > 0)
+                if(e.clientY < lastY ? (top + sub) : (top + sub) > 0 && height + soma >= minHeight)
                 {
-                    setHeight(e.clientY < lastY ? height + soma : height + soma);
+                    setHeight(height + soma);
                     setTop(e.clientY < lastY ? (top - soma) : (top + sub));
                     setLastY(e.clientY);    
                 }
@@ -71,9 +78,9 @@ function Element(props: Atributos) {
             if(e.clientX !== lastX && top > 0)
             {
                 //Valida se não foi arrastada pra fora da pagina (para cima).
-                if(e.clientX < lastX ? (top + sub) : (top + sub) > 0)
+                if(e.clientX < lastX ? (top + sub) : (top + sub) > 0 && width + soma >= minWidth)
                 {
-                    setWidth(e.clientX < lastX ? width + soma : width + soma);
+                    setWidth(width + soma);
                     setLeft(e.clientX < lastX ? (left - soma) : (left + sub));
                     setLastX(e.clientX);    
                 }
@@ -81,15 +88,15 @@ function Element(props: Atributos) {
         }
     }
 
-    const handleDragStart = async (e: any) => {
+    const handleDragStart = async (e: React.DragEvent<HTMLDivElement>) => {
         e.dataTransfer.setData("text/plain", "");
         const img = await new Image();
         e.dataTransfer.setDragImage(img, 0, 0);
     }
 
     return(
-            <div style={{position: 'absolute', background: 'green', width: width, height: height, top: top, left: left}}>
-                <div style={{position: 'relative', width: width, height: height}}>
+            <div style={{position: 'absolute', width: width, height: height, top: top, left: left}}>
+                <div style={{position: 'relative', width: '100%', height: '100%'}}>
                     <div
                         draggable={true}
                         onDragStart={(e)=> handleDragStart(e)}
@@ -114,7 +121,7 @@ function Element(props: Atributos) {
                         onDrag={(e)=> handleDrag("bottom",e)}
                         style={{width: '100%', height: '10px', background: '#000', position: 'absolute',  bottom: 0, cursor: 's-resize'}}>
                     </div>
-                    <div>
+                    <div style={{height: '100%', width: '100%'}}>
                         {props.children}
                     </div>
                 </div>
