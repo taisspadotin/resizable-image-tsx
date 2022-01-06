@@ -1,7 +1,7 @@
 # Biblioteca de redefinição de tamanho de uma janela com posição absoluta
 
 | Propriedade | Tipo |  Descrição|
-| ------------------- | ------------------- |
+| ------------------- | ------------------- | ------------------- |
 |  top | numero |  posição inicial do top |
 |  left | numero | posição inicial do left |
 |  width | numero |  width inicial |
