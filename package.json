@@ -1,8 +1,8 @@
 {
-  "name": "resize",
+  "name": "react-resizable-all",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
+    "-": "0.0.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -10,15 +10,14 @@
     "@types/node": "^16.11.18",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0",
+    "babel-cli": "^6.26.0",
+    "save-dev": "0.0.1-security",
     "typescript": "^4.5.4",
     "web-vitals": "^2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf dist && NODE_ENV=production babel src/Resizable --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,6 +43,16 @@
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "eslint": "^8.6.0",
-    "eslint-plugin-react": "^7.28.0"
+    "eslint-plugin-react": "^7.28.0",
+    "react": "^17.0.2",
+    "react-scripts": "5.0.0",
+    "react-dom": "^17.0.2"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [ "dist", "README.md" ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taisspadotin/resizable-image-tsx"
   }
 }

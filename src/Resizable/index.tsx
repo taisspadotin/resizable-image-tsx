@@ -3,16 +3,20 @@ import React, { useState } from 'react';
 interface Atributos {
     children: React.ReactNode,
     minWidth?: number,
-    minHeight?: number
+    minHeight?: number,
+    top?: number,
+    left?: number,
+    width?: number,
+    height?: number
 }
 
-function Element(props: Atributos) {
-    const [height, setHeight] = useState<number>(100)
-    const [width, setWidth] = useState<number>(100)
+function Resizable(props: Atributos) {
+    const [height, setHeight] = useState<number>(props.height ? props.height : 100)
+    const [width, setWidth] = useState<number>(props.width ? props.width : 100)
     const [lastY, setLastY] = useState<number>(0)
     const [lastX, setLastX] = useState<number>(0)
-    const [top, setTop] = useState<number>(50)
-    const [left, setLeft] = useState<number>(200)
+    const [top, setTop] = useState<number>(props.top ? props.top :50)
+    const [left, setLeft] = useState<number>(props.left ? props.left : 200)
     const [minWidth, setMinWidth] = useState<number>(props.minWidth ? props.minWidth : 50);
     const [minHeight, setMinHeight] = useState<number>(props.minHeight ? props.minHeight : 50);
     
@@ -92,6 +96,8 @@ function Element(props: Atributos) {
         e.dataTransfer.setData("text/plain", "");
         const img = await new Image();
         e.dataTransfer.setDragImage(img, 0, 0);
+        e.dataTransfer.effectAllowed = "copyMove";
+            
     }
 
     return(
@@ -101,25 +107,25 @@ function Element(props: Atributos) {
                         draggable={true}
                         onDragStart={(e)=> handleDragStart(e)}
                         onDrag={(e)=> handleDrag("top",e)}
-                        style={{width: '100%', height: '10px', background: '#000', position: 'absolute', top: 0, cursor: 's-resize'}}>
+                        style={{width: '100%', height: '5px', position: 'absolute', top: 0, cursor: 's-resize'}}>
                     </div>
                     <div
                         draggable={true}
                         onDragStart={(e)=> handleDragStart(e)}
                         onDrag={(e)=> handleDrag("rigth",e)}
-                        style={{height: '100%', width: '10px', background: '#000', position: 'absolute', top: 0, right: 0, cursor: 'e-resize'}}>
+                        style={{height: '100%', width: '5px', position: 'absolute', top: 0, right: 0, cursor: 'e-resize'}}>
                     </div>
                     <div
                         draggable={true}
                         onDragStart={(e)=> handleDragStart(e)}
                         onDrag={(e)=> handleDrag("left",e)}
-                        style={{height: '100%', width: '10px', background: '#000', position: 'absolute', top: 0, left: 0, cursor: 'e-resize'}}>
+                        style={{height: '100%', width: '5px', position: 'absolute', top: 0, left: 0, cursor: 'e-resize'}}>
                     </div>
                     <div
                         draggable={true}
                         onDragStart={(e)=> handleDragStart(e)}
                         onDrag={(e)=> handleDrag("bottom",e)}
-                        style={{width: '100%', height: '10px', background: '#000', position: 'absolute',  bottom: 0, cursor: 's-resize'}}>
+                        style={{width: '100%', height: '5px', position: 'absolute',  bottom: 0, cursor: 's-resize'}}>
                     </div>
                     <div style={{height: '100%', width: '100%'}}>
                         {props.children}
@@ -129,4 +135,4 @@ function Element(props: Atributos) {
         )
 }
 
-export default Element;
+export default Resizable;
