@@ -97,11 +97,10 @@ function Resizable(props: Atributos) {
         const img = await new Image();
         e.dataTransfer.setDragImage(img, 0, 0);
         e.dataTransfer.effectAllowed = "copyMove";
-            
     }
 
     return(
-            <div style={{position: 'absolute', width: width, height: height, top: top, left: left}}>
+            <div className="content-drag" style={{position: 'absolute', width: width, height: height, top: top, left: left, boxSizing: 'border-box'}}>
                 <div style={{position: 'relative', width: '100%', height: '100%'}}>
                     <div
                         draggable={true}
