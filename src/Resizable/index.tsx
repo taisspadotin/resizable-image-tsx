@@ -96,11 +96,17 @@ function Resizable(props: Atributos) {
         e.dataTransfer.setData("text/plain", "");
         const img = await new Image();
         e.dataTransfer.setDragImage(img, 0, 0);
-        e.dataTransfer.effectAllowed = "copyMove";
+        e.dataTransfer.effectAllowed = "all";
     }
 
     return(
-            <div className="content-drag" style={{position: 'absolute', width: width, height: height, top: top, left: left, boxSizing: 'border-box'}}>
+            <div className="content-drag" onDrop={(e => {console.log(e)})}
+            onDragOver={(e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                //e.currentTarget.style.cursor = "move";
+            })}
+            style={{position: 'absolute', background: 'red', width: width, height: height, top: top, left: left, boxSizing: 'border-box'}}>
                 <div style={{position: 'relative', width: '100%', height: '100%'}}>
                     <div
                         draggable={true}
